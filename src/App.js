@@ -1,23 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(0);
+
+  const getRandomUser = () => {
+    const randomId = Math.floor(Math.random() * 10 + 1);
+    setUserId(randomId);
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch(
+        `https://jsonplaceholder.typicode.com/users/${userId}`
+      );
+      const data = await res.json();
+
+      setUser(data);
+    };
+
+    fetchUser();
+  }, [userId]);
+
+  if (!user) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container mx-auto'>
+      <h1 className='text-3xl'>test</h1>
+      <button
+        className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'
+        onClick={() => getRandomUser()}
+      >
+        Get User
+      </button>
+      <div>
+        <pre className='py-4 my-4 bg-green-50'>
+          {JSON.stringify(user, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 }
