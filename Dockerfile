@@ -8,6 +8,8 @@ RUN yarn
 
 RUN yarn build
 
+FROM nginx:stable-alpine
+
 COPY --from=react_build /app/build /usr/share/nginx/html
 COPY --from=react_build /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
